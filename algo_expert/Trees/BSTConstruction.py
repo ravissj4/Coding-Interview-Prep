@@ -9,81 +9,82 @@ class BST:
         self.right = None
 
     def insert(self, value):
-        tree = self
-        if value < tree.value:
-            if tree.left is None:
-                tree.left = BST(value)
+        if value < self.value:
+            if self.left is None:
+                self.left = BST(value)
             else:
-                tree.left.insert(value)
+                self.left.insert(value)
         else:
-            if tree.right is None:
-                tree.right = BST(value)
+            if self.right is None:
+                self.right = BST(value)
             else:
-                tree.right.insert(value)
+                self.right.insert(value)
         return self
 
     def contains(self, value):
-        # Write your code here.
-        tree = self
-        if value < tree.value:
-            if tree.left is None:
+        if value < self.value:
+            if self.left is None:
                 return False
             else:
-                return tree.left.contains(value)
-        elif value > tree.value:
-            if tree.right is None:
+                return self.left.contains(value)
+        elif value > self.value:
+            if self.right is None:
                 return False
             else:
-                return tree.right.contains(value)
-        else:
+                return self.right.contains(value)
+        else: # if the value == self.value
             return True
 
     def remove(self, value, parent = None):
-        # Write your code here.
-        # Do not edit the return statement of this method.
-        root = self
-        if value < root.left:
-            if root.left is None:
-                return -1
-            else:
-                root.left.remove(value, root)
-        elif value > root.right:
-            if root.right is None:
-                return -1
-            else:
-                root.right.remove(value, root)
+        if value < self.value:
+            if self.left != None:
+                self.left.remove(value, self)
+        elif value > self.value:
+            if self.right != None:
+                self.right.remove(value, self)
         else:
-            # means value = root.value
-            # if root node is not the root of the tree
-                # case 1 : root has both left and right child
-                # case 2 : root has only one child = left
-                # case 3 : root has only one child = right
-                # case 4 : root has no child      
+            # means value = self.value
+            # if self node is not the self of the tree
+                # case 1 : self has both left and right child
+                # case 2 : self has only one child = left
+                # case 3 : self has only one child = right
+                # case 4 : self has no child      
             # else
-                # root = None
+                # self = None (happens when parent == None)
+			# CASE 1 : both left and right children exist
+			if self.left != None and self.right != None:
+                inorderSuccessor = self.right.getMinValue()
+                self.value = inorderSuccessor 
+                self.right.remove(inorderSuccessor, self.right)
+			elif parent == None:
+                # means node to be deleted == self and
+                # it either has only left or only right child
+                # in either case, we need to make everything of 
+                # self node == that node
+                if self.left != None:
+                    self.value = self.left.value
+                    self.left = self.left.left
+                    self.right = self.left.right
+                elif self.right != None:
+                    self.value = self.right.value
+                    self.left = self.right.left
+                    self.right = self.right.right
+                else:
+                    # this self node does not have any children, do nothing !
+					pass
+            else: 
+				# case : parent != None and left child exists
+				
+                if parent.left == self:
+                    # if self.left != None:
+                    #     parent.left = self.left
+                    # else:
+                    #     parent.left = self.right
+                    parent.left = self.left if self.left != None else self.right
+                elif parent.right == self:
+                    parent.right = self.left if self.left != None else self.right
 
-            if parent is None:
-                root = None
-            else:
-                if root.left is not None and root.right is not None:
-                    inorderSuccessor = root.right.getMinValue()
-                    root.value = inorderSuccessor 
-                    root.right.remove(inorderSuccessor, root.right)
-                elif root.left is None:
-                    if parent.left == root:
-                        parent.left = root.right
-                    else:
-                        parent.right = root.right
-                elif root.right is None:
-                    if parent.left == root:
-                        parent.left = root.left
-                    else:
-                        parent.right = root.left
-                elif root.left is None and root.right is None:
-                    if parent.left == root:
-                        parent.left = None
-                    else:
-                        parent.right = None
+                    
         return self
     
     def getMinValue(self):
