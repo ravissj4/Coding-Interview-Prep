@@ -2,7 +2,6 @@ def isValidSubsequence(array, sequence):
 	i,j=0,0
 	matched_elements = 0
 	while i != len(sequence):
-		# print(f'i = {i} and j = {j}')
         if j == len(array):
             break
         if sequence[i] == array[j]:
