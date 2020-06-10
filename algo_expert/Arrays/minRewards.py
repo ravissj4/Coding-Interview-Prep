@@ -10,4 +10,13 @@ def minRewards(array):
         
     return sum(rewards)
         
-
+"""
+Algorithm:
+traverse from left to right, 
+    if element is greater than prev, 
+        then increment rewards, 
+    else do nothing
+traverse from right to left, 
+    if element is greater than prev element, 
+        then increment rewards by max of ( prev reward + 1 and prev value of reward )
+"""
