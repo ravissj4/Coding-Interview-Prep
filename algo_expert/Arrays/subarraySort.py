@@ -65,3 +65,12 @@ def out_of_order(array, i):
     if i == len(array) - 1:
         return array[i] < array[i-1]
     return array[i] > array[i+1] or array[i] < array[i-1]    
+ 
+"""
+algorithm :
+Note : atleast 2 elements will be out of order if at all.
+1 2 7 3 4 5 6 8 9 -> both 7 and 3 are out of order
+1. figure out min out of order and max out of order element
+2. figure out their correct positions in the array
+3. the correct positions are the extremes, return them.
+"""
